@@ -1,5 +1,6 @@
 enum Routes {
-  menu('/');
+  menu('/'),
+  assets('/assets');
 
   final String path;
 
