@@ -52,7 +52,7 @@ class AssetCard extends StatelessWidget {
               padding: EdgeInsets.only(left: 4.0),
               child: Icon(
                 Icons.electric_bolt,
-                color: AppThemeColors.green,
+                color: AppColorsTheme.green,
                 size: 10,
               ),
             ),

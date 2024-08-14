@@ -8,8 +8,11 @@ class AssetStateLoading implements AssetStateBase {}
 
 class AssetStateLoaded implements AssetStateBase {
   final List<Location> locations;
-
-  AssetStateLoaded({required this.locations});
+  final List<Location> locationsFilter;
+  AssetStateLoaded({
+    required this.locations,
+    this.locationsFilter = const [],
+  });
 }
 
 class AssetStateError implements AssetStateBase {

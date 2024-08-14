@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:folder_tree/src/core/utils/custom_navigation.dart';
+import 'package:folder_tree/src/core/utils/debouncer/debouncer.dart';
 import 'package:folder_tree/src/features/assets/domain/entities/location.dart';
 import 'package:folder_tree/src/features/assets/presenter/controllers/asset_controller.dart';
+import 'package:folder_tree/src/ui/theme/extensions/colors_extension.dart';
 import 'package:folder_tree/src/ui/theme/extensions/text_extension.dart';
 
+import '../../../../ui/widgets/custom_divider.dart';
 import '../../../../ui/widgets/tree_node_custom.dart';
 import '../../domain/entities/component.dart';
 import '../../domain/entities/main_asset.dart';
@@ -21,11 +24,14 @@ class AssetsPage extends StatefulWidget {
 
 class _AssetsPageState extends State<AssetsPage> {
   late final AssetController controller;
-
+  Debouncer debouncer = Debouncer(milliseconds: 500);
   @override
   void initState() {
     controller = Modular.get<AssetController>();
-    controller.fetchLocations();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.fetchLocations();
+    });
+
     super.initState();
   }
 
@@ -58,6 +64,10 @@ class _AssetsPageState extends State<AssetsPage> {
     }).toList();
   }
 
+  void _search(String value) {
+    debouncer.call(() => controller.filterByName(value));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,27 +78,65 @@ class _AssetsPageState extends State<AssetsPage> {
             CustomNavigator.pop();
           },
         ),
-        title: Text('Assets', style: context.texts.headlineSmall),
+        title: Text(
+          'Assets',
+          style:
+              context.texts.titleLarge?.copyWith(color: context.colors.surface),
+        ),
       ),
       body: SingleChildScrollView(
-        child: ValueListenableBuilder(
-            valueListenable: controller.state,
-            builder: (context, state, _) {
-              return switch (state) {
-                AssetStateInitial() => const SizedBox.shrink(),
-                AssetStateLoading() => const Center(
-                    child: CircularProgressIndicator.adaptive(),
-                  ),
-                AssetStateError(errorMessage: final errorMessage) => Center(
-                    child: Text(
-                      errorMessage,
+        child: Column(
+          children: [
+            const SizedBox(
+              height: 16,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: TextFormField(
+                decoration: InputDecoration(
+                  prefixIcon: Padding(
+                    padding: const EdgeInsets.only(left: 16.0, right: 8),
+                    child: Icon(
+                      Icons.search,
+                      color: context.colors.onSecondary,
                     ),
                   ),
-                AssetStateLoaded(locations: final locations) => TreeViewCustom(
-                    nodes: _buildTreeNodes(locations),
+                  prefixIconConstraints: const BoxConstraints(
+                    maxHeight: 14,
                   ),
-              };
-            }),
+                  hintText: 'Buscar ativo ou local',
+                ),
+                keyboardType: TextInputType.text,
+                onChanged: _search,
+                textInputAction: TextInputAction.search,
+              ),
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            const CustomDivider(),
+            ValueListenableBuilder(
+                valueListenable: controller.state,
+                builder: (context, state, _) {
+                  return switch (state) {
+                    AssetStateInitial() => const SizedBox.shrink(),
+                    AssetStateLoading() => const Center(
+                        child: CircularProgressIndicator.adaptive(),
+                      ),
+                    AssetStateError(errorMessage: final errorMessage) => Center(
+                        child: Text(
+                          errorMessage,
+                        ),
+                      ),
+                    AssetStateLoaded(locationsFilter: final locations) =>
+                      TreeViewCustom(
+                        nodes: _buildTreeNodes(locations),
+                      ),
+                    
+                  };
+                }),
+          ],
+        ),
       ),
     );
   }
