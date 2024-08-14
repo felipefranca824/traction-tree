@@ -15,7 +15,6 @@ import '../../domain/entities/component.dart';
 import '../../domain/entities/main_asset.dart';
 import '../../domain/entities/tree_element_base.dart';
 import '../controllers/asset_state.dart';
-import '../dto/filter_type.dart';
 import '../widgets/asset_card.dart';
 import '../widgets/filters_widget.dart';
 

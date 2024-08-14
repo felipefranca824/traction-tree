@@ -2,9 +2,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:folder_tree/src/core/services/rest_client/constants/client_constants.dart';
-import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 class DioFactory {
   static Dio create() {
@@ -16,21 +14,6 @@ class DioFactory {
         },
       ),
     );
-
-    if (kDebugMode) {
-      // dio.interceptors.add(
-      //   PrettyDioLogger(
-      //     request: true,
-      //     requestHeader: true,
-      //     responseBody: true,
-      //     responseHeader: true,
-      //     requestBody: true,
-      //     error: true,
-      //     maxWidth: 90,
-      //     compact: true,
-      //   ),
-      // );
-    }
 
     return dio;
   }

@@ -27,7 +27,8 @@ class CompanyCard extends StatelessWidget {
         ),
         child: Text(
           company.name,
-          style: context.texts.titleMedium,
+          style:
+              context.texts.titleLarge?.copyWith(color: context.colors.surface),
         ),
       ),
     );
