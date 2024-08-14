@@ -200,6 +200,9 @@ class AssetController {
         for (var subAsset in asset.subAssets) {
           if (subAsset is Component && subAsset.status == status) return true;
         }
+        for (var component in asset.components) {
+          if (component.status == status) return true;
+        }
       }
     }
 
