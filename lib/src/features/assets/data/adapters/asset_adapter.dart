@@ -1,30 +1,28 @@
-import 'package:folder_tree/src/core/exceptions/app_exceptions.dart';
 import 'package:folder_tree/src/features/assets/domain/entities/asset_base.dart';
 import 'package:folder_tree/src/features/assets/domain/entities/component.dart';
 import 'package:folder_tree/src/features/assets/domain/entities/main_asset.dart';
 
 abstract class AssetAdapter {
   static AssetBase fromMap(Map<String, dynamic> map) {
-    if (map['sensorType'] != null) {
+    final sensorType = map['sensorType'] != null
+        ? SensorType.fromApiValue(map['sensorType'] as String)
+        : null;
+
+    // Verifica se é um componente
+    if (sensorType != null) {
+      final status = Status.fromApiValue(map['status'] as String);
       return Component(
         id: map['id'],
         name: map['name'],
-        sensorType: SensorType.fromApiValue(map['sensorType'] as String),
-        status: Status.fromApiValue(map['status'] as String),
+        sensorType: sensorType,
+        status: status,
+        locationId: map['locationId'],
         parentId: map['parentId'],
-        locationId: map['locationId'],
       );
     }
 
-    if (map['locationId'] != null && map['sensorType'] == null) {
-      return MainAsset(
-        id: map['id'],
-        name: map['name'],
-        locationId: map['locationId'],
-      );
-    }
-
-    if (map['parentId'] != null && map['sensorType'] == null) {
+    // Verifica se é um MainAsset
+    if (map['parentId'] != null) {
       return MainAsset(
         id: map['id'],
         name: map['name'],
@@ -32,6 +30,19 @@ abstract class AssetAdapter {
       );
     }
 
-    throw const AppException(message: 'Asset não mapeado');
+    // Verifica se é um asset com uma Location como pai
+    if (map['locationId'] != null) {
+      return MainAsset(
+        id: map['id'],
+        name: map['name'],
+        locationId: map['locationId'],
+      );
+    }
+
+    // Caso contrário, é um asset desconectado
+    return MainAsset(
+      id: map['id'],
+      name: map['name'],
+    );
   }
 }

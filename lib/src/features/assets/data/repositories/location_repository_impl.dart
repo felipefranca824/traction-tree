@@ -5,6 +5,7 @@ import 'package:folder_tree/src/core/errors/app_failure.dart';
 import 'package:folder_tree/src/features/assets/domain/entities/location.dart';
 import 'package:fpdart/fpdart.dart';
 
+import '../../../../core/services/rest_client/exceptions/rest_client_exception.dart';
 import '../../domain/repositories/location_repository.dart';
 import '../datasources/location_datasource.dart';
 
@@ -18,6 +19,8 @@ class LocationRepositoryImpl implements LocationRepository {
     try {
       final locations = await _locationDatasource.getAll(companyId);
       return left(locations);
+    } on ClientException catch (e) {
+      return right(AppFailure(messageError: e.message));
     } catch (e) {
       return right(AppFailure(messageError: e.toString()));
     }

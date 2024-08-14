@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 import 'package:folder_tree/src/features/menu/presenter/controller/menu_state.dart';
+import 'package:folder_tree/src/ui/theme/extensions/colors_extension.dart';
 import 'package:folder_tree/src/ui/theme/extensions/text_extension.dart';
 
 import '../../../../core/routes/routes.dart';
@@ -36,7 +37,8 @@ class _CompaniesPageState extends State<CompaniesPage> {
       appBar: AppBar(
         title: Text(
           'TRACTIAN',
-          style: context.texts.headlineSmall,
+          style: context.texts.headlineLarge
+              ?.copyWith(color: context.colors.surface),
         ),
       ),
       body: ValueListenableBuilder(

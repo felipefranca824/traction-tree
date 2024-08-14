@@ -18,18 +18,18 @@ class DioFactory {
     );
 
     if (kDebugMode) {
-      dio.interceptors.add(
-        PrettyDioLogger(
-          request: true,
-          requestHeader: true,
-          responseBody: true,
-          responseHeader: true,
-          requestBody: true,
-          error: true,
-          maxWidth: 90,
-          compact: true,
-        ),
-      );
+      // dio.interceptors.add(
+      //   PrettyDioLogger(
+      //     request: true,
+      //     requestHeader: true,
+      //     responseBody: true,
+      //     responseHeader: true,
+      //     requestBody: true,
+      //     error: true,
+      //     maxWidth: 90,
+      //     compact: true,
+      //   ),
+      // );
     }
 
     return dio;

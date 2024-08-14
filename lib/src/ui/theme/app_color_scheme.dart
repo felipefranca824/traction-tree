@@ -7,6 +7,7 @@ class AppColorsTheme {
   static const green = Color(0xff52C41A);
   static const red = Color(0xFFED3833);
   static const neutral100 = Color(0xFFEAEFF3);
+  static const neutral200 = Color(0xFFD8DFE6);
   static const neutral500 = Color(0xFF8E98A3);
 }
 
@@ -22,7 +23,7 @@ class AppColorScheme extends ColorScheme {
     super.background = AppColorsTheme.white,
     super.onBackground = AppColorsTheme.primary,
     super.surface = AppColorsTheme.white,
-    super.onSurface = AppColorsTheme.primary,
+    super.onSurface = AppColorsTheme.neutral200,
     super.surfaceVariant = AppColorsTheme.primary,
   });
 }
