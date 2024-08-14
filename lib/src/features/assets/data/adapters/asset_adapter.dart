@@ -8,7 +8,6 @@ abstract class AssetAdapter {
         ? SensorType.fromApiValue(map['sensorType'] as String)
         : null;
 
-    // Verifica se é um componente
     if (sensorType != null) {
       final status = Status.fromApiValue(map['status'] as String);
       return Component(
@@ -21,7 +20,6 @@ abstract class AssetAdapter {
       );
     }
 
-    // Verifica se é um MainAsset
     if (map['parentId'] != null) {
       return MainAsset(
         id: map['id'],
@@ -30,7 +28,6 @@ abstract class AssetAdapter {
       );
     }
 
-    // Verifica se é um asset com uma Location como pai
     if (map['locationId'] != null) {
       return MainAsset(
         id: map['id'],
@@ -39,7 +36,6 @@ abstract class AssetAdapter {
       );
     }
 
-    // Caso contrário, é um asset desconectado
     return MainAsset(
       id: map['id'],
       name: map['name'],

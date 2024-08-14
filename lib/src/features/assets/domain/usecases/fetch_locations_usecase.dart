@@ -36,37 +36,30 @@ class FetchLocationsUsecase extends BaseUsecase<String, List<Location>> {
   }
 
   List<Location> _buildTree(List<Location> locations, List<AssetBase> assets) {
-    // Mapa de Locations e Assets por ID
     final Map<String, Location> locationMap = {};
     final Map<String, AssetBase> assetMap = {};
-    // Criar mapa de Locations
+
     for (var loc in locations) {
       locationMap[loc.id] = loc;
     }
 
-    // Organizar subLocations
     for (var loc in locations) {
       if (loc.parentId != null) {
         locationMap[loc.parentId]?.addSubLocation(loc);
       }
     }
 
-    // Criar mapa de Assets e organizar a árvore
-    for (var asset in assets) {
-      if (asset is MainAsset) {
-        assetMap[asset.id] = asset;
-      }
-
+    assetMap.addAll({for (var element in assets) element.id: element});
+    for (var asset in assetMap.values) {
       if (asset.locationId != null) {
         locationMap[asset.locationId]?.addAsset(asset);
-      } else if (asset.parentId != null) {
+      } else if (asset.parentId != null && asset is MainAsset) {
         (assetMap[asset.parentId] as MainAsset?)?.addSubAsset(asset);
       } else if (asset is Component) {
         (assetMap[asset.parentId] as MainAsset?)?.addComponent(asset);
       }
     }
 
-    // Retornar a lista de Locations raiz (que não têm parentId)
     return locationMap.values.where((loc) => loc.parentId == null).toList();
   }
 }
