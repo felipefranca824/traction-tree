@@ -10,6 +10,9 @@ class AppTheme {
       appBarTheme: const AppBarTheme(
         color: AppThemeColors.blueDark,
         centerTitle: true,
+        iconTheme: IconThemeData(
+          color: AppThemeColors.white,
+        ),
       ),
       colorScheme: const AppColorScheme(),
       textTheme: const AppTextTheme(),

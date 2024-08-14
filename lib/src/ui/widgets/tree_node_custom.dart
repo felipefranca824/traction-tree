@@ -64,7 +64,9 @@ class _NodeWidgetState extends State<NodeWidget> {
                 child: GestureDetector(
                   onTap: changedExpanded,
                   child: Icon(
-                    isExpanded ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                    isExpanded
+                        ? Icons.keyboard_arrow_up
+                        : Icons.keyboard_arrow_down,
                     size: 24,
                   ),
                 ),
